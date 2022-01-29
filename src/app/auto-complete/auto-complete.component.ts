@@ -1,4 +1,11 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  OnInit,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { of } from 'rxjs';
 import { debounceTime, map, distinctUntilChanged } from 'rxjs/operators';
 import { fromEvent } from 'rxjs';
@@ -11,6 +18,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AutoCompleteComponent implements OnInit {
   @ViewChild('searchInput', { static: true }) searchInput: ElementRef;
+  @Output() newItemEvent = new EventEmitter<string>();
   apiResponse: any = [];
   isLoading = false;
 
@@ -46,5 +54,9 @@ export class AutoCompleteComponent implements OnInit {
       return of([]);
     }
     return this.httpClient.get(`https://restcountries.com/v2/name/${term}`);
+  }
+
+  onItemClicked(value: string) {
+    this.newItemEvent.emit(value);
   }
 }
