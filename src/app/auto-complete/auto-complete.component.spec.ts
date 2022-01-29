@@ -8,7 +8,7 @@ import {
 
 import { AutoCompleteComponent } from './auto-complete.component';
 import { HttpClient } from '@angular/common/http';
-import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
+import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 describe('AutoCompleteComponent', () => {
@@ -21,7 +21,7 @@ describe('AutoCompleteComponent', () => {
       imports: [HttpClientTestingModule],
       declarations: [AutoCompleteComponent],
       providers: [{ provide: HttpClient, useValue: httpClientSpy }],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 
@@ -42,23 +42,18 @@ describe('AutoCompleteComponent', () => {
     expect(httpClientSpy.get).toHaveBeenCalledOnceWith(
       'https://restcountries.com/v2/name/ind'
     );
+    fixture.detectChanges();
   });
 
-  it('should search for location on init', fakeAsync(() => {
+  it('should search for country on init', fakeAsync(() => {
     const spy = httpClientSpy.get.and.returnValue([{ name: 'India' }]);
-
     fixture.detectChanges();
-
     const rendered: DebugElement = fixture.debugElement.query(
       By.css('#searchInput')
     );
-
     rendered.nativeElement.value = 'ind';
     rendered.nativeElement.dispatchEvent(new Event('input'));
-
     tick(500);
-    fixture.detectChanges();
-
     expect(spy).toHaveBeenCalledWith('https://restcountries.com/v2/name/ind');
   }));
 });
