@@ -1,0 +1,10 @@
+  
+    <div class="wrapper">
+      <div class="control" [ngClass]="{'is-loading': isLoading}">
+        <input type="text" #searchInput class="input" placeholder="Type country name.." />
+      </div>
+
+      <div class="list" *ngIf="apiResponse?.length > 0 ">
+        <a class="list-item" *ngFor="let item of apiResponse">{{item?.name}}</a>
+        </div>
+    </div>
